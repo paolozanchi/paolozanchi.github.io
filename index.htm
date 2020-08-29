@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="it">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+        <title>Tracciamento spese mensili</title>
+        <link rel="stylesheet" href="./bootstrap-4.4.1/css/bootstrap.min.css" />
+        <link rel="canonical" href="https://loganblades.altervista.org/projects/tracciaSpese/" />
+        <meta name="theme-color" content="#fb8f31" />
+
+        <script src="https://www.gstatic.com/charts/loader.js"></script>
+
+        <link rel="stylesheet" href="./css/style.css" />
+    </head>
+    <body>        
+        <main role="main" class="container-fluid h-100">
+            <div class="row justify-content-center h-100">
+                <div id="menu" class="col-4 menu">
+                    <div class="h-100 d-flex flex-column">
+                        <div class="row">
+                            <div class="col-9 mb-1">
+                                <form>
+                                    <div class="form-group">
+                                        <input type="file" id="input-excel" class="form-control-file" name="fileUploader" accept=".xls, .xlsx"/>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-4 col-md-12 mb-3">
+                                <div class="card border-left-entrate">
+                                    <div class="card-body">
+                                        <div class="text-xs font-weight-bold text-uppercase mb-1">Entrate</div>
+                                        <div class="h5 mb-0 font-weight-bold">€ <span id="totaleEntrate"></span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-md-12 mb-3">
+                                <div class="card border-left-risparmi">
+                                    <div class="card-body">
+                                        <div class="text-xs font-weight-bold text-uppercase mb-1">Risparmi</div>
+                                        <div class="h5 mb-0 font-weight-bold">€ <span id="totaleRisparmi"></span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-md-12 mb-3">
+                                <div class="card border-left-uscite">
+                                    <div class="card-body">
+                                        <div class="text-xs font-weight-bold text-uppercase mb-1">Uscite</div>
+                                        <div class="h5 mb-0 font-weight-bold">€ <span id="totaleUscite"></span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-6 col-md-12 mb-3">
+                                <label for="dataDa">Da</label>
+                                <input type="date" class="form-control" id="dataDa">
+                            </div>
+                            <div class="col-xl-6 col-md-12 mb-3">
+                                <label for="dataA">A</label>
+                                <input type="date" class="form-control" id="dataA" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <textarea id="debug" rows="4" cols="50"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-8 mainSide">
+                    <div class="row">
+                        <div id="lineChart_div" class="col-12"></div>
+                    </div>
+                    <div class="row">
+                        <div id="pieChart_div" class="col-4"></div>
+                    </div>
+                </div>
+            </div>
+        </main> 
+
+        <script src="./js/jquery-3.4.1.slim.min.js"></script>
+        <script src="./js/popper-1.16.0.min.js"></script>
+        <script src="./bootstrap-4.4.1/js/bootstrap.min.js"></script>
+        <script src="./js/xlsx.full.min.js"></script>
+        <script src="./js/moment.js"></script>
+        <script src="./js/tracciaSpese.js"></script>
+    </body>
+</html>

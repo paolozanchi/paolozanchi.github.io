@@ -1,0 +1,47 @@
+:root {
+    /* Base */
+    --grey1: #222831;
+    --grey2: #393e46;
+    --grey3: #525252;
+    --red: #b55400;
+    --white: #eeeeee;
+
+    --entrate: #1cc88a;
+    --risparmi: #f6c23e;
+    --uscite: #e74a3b;
+}
+
+html, body {
+    height: 100%;
+    background: var(--grey1);
+    color: var(--white);
+}
+
+.menu {
+    background: var(--grey2);
+    padding: 1em;
+}
+
+.border-left-entrate {
+    background: var(--grey3);
+    border-left: .25rem solid var(--entrate);
+}
+
+.border-left-risparmi {
+    background: var(--grey3);
+    border-left: .25rem solid var(--risparmi);
+}
+
+.border-left-uscite {
+    background: var(--grey3);
+    border-left: .25rem solid var(--uscite);
+}
+
+.form-control-plaintext {
+    color: var(--white);
+}
+
+.mainSide {
+    background: var(--grey3);
+    padding: 1em;
+}
