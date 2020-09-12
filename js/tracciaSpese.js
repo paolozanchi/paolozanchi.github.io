@@ -5,7 +5,7 @@ function isValidRow(row) {
 }
 
 function isRisparmio(row) {
-    return row.causale == 'GIROCONTO AUTOMATICO';
+    return row.causale == 'GIROCONTO AUTOMATICO' || row.descrizioneOperazione.toUpperCase().includes("IT66M0344501000000057023682");
 }
 
 function isUscita(row) {
@@ -114,7 +114,7 @@ $('#input-excel').change(function(e) {
         console.log("categorie", JSONresult);
     
         // Load the Visualization API
-        google.charts.load('current', {'packages':['corechart']});
+        google.charts.load('current', {packages:['corechart']});
         // Set a callback to run when the Google Visualization API is loaded.
         google.charts.setOnLoadCallback(drawLineChart);
         google.charts.setOnLoadCallback(drawPieChart);
@@ -159,48 +159,86 @@ function drawLineChart() {
 }
 
 function drawPieChart() {
-    let data = [];
-    data.push(['Categoria', 'Euro spesi']);
-
+    let datatable = new google.visualization.DataTable();
+    datatable.addColumn('string', 'Categoria');
+    datatable.addColumn('number', '€');
+    
     let sommaPerCategorie = JSONresult.filter(isUscita).reduce((acc, cur) => {
-        acc[cur.categoria] = (acc[cur.categoria] || 0) + (cur.importo * -1);
+        acc[cur.superCategoria] = (acc[cur.superCategoria] || 0) + (cur.importo * -1);
         return acc;
     }, []);
+
+    // let sommaPerCategorie = JSONresult.filter(isUscita).reduce((acc, cur) => {
+    //     if (!(cur.categoria in acc))
+    //         acc.__array.push(acc[cur.categoria] = cur);
+    //     else {
+    //         acc[cur.categoria].importo += cur.importo;
+    //     }
+    //     return acc;
+    // }, {__array:[]}).__array;
+
     console.log("sommaPerCategorie", sommaPerCategorie);
-
-    $('#debug').text(sommaPerCategorie);
-    
-    let data2 = data.concat(sommaPerCategorie);
-    console.log("data2", data2);
-
-    data2 = google.visualization.arrayToDataTable(data2);
-
-    var options = {
-        title: 'My Daily Activities'
-    };
+    datatable.addRows([
+        ['AFFITTO', 384000],
+        ['AUTOMOBILE', 92532],
+        ['BOLLETTE', 50262],
+        ['CARTA_CREDITO', 50286],
+        ['PAYPAL', 38888],
+        ['RISTORANTI', 38080],
+        ['SUPERMERCATI', 90967],
+        ['undefined', 165399]
+    ]);
 
     // Instantiate and draw our chart, passing in some options.
     chart = new google.visualization.PieChart(document.getElementById('pieChart_div'));
-    chart.draw(data, options);
+    chart.draw(datatable, {});
 }
 
 function assegnaCategorie(arr) {
     return arr.map(e => {
-        let _categoria;
+        let _categoria, _superCategoria;
 
-        if (e.descrizioneOperazione.toUpperCase().includes("CONAD")) _categoria = "CONAD";
-        if (e.descrizioneOperazione.toUpperCase().includes("ESSELUNGA")) _categoria = "ESSELUNGA";
-        if (e.descrizioneOperazione.toUpperCase().includes("AUCHAN")) _categoria = "AUCHAN";
-        if (e.descrizioneOperazione.toUpperCase().includes("CARREFOUR")) _categoria = "CARREFOUR";
-        if (e.descrizioneOperazione.toUpperCase().includes("METANO")) _categoria = "METANO";
-        if (e.descrizioneOperazione.toUpperCase().includes("AFFITTO")) _categoria = "AFFITTO";
-        if (e.descrizioneOperazione.toUpperCase().includes("SERVIZIO ELETTRICO NAZIONALE")) _categoria = "BOLLETTA_LUCE";
-        if (e.descrizioneOperazione.toUpperCase().includes("E.ON ENERGIA")) _categoria = "BOLLETTA_GAS";
+        // Supermercati
+        if (e.descrizioneOperazione.toUpperCase().includes("CONAD")) {_categoria = "CONAD"; _superCategoria = "SUPERMERCATI";}
+        if (e.descrizioneOperazione.toUpperCase().includes("ESSELUNGA")) {_categoria = "ESSELUNGA"; _superCategoria = "SUPERMERCATI";}
+        if (e.descrizioneOperazione.toUpperCase().includes("AUCHAN")) {_categoria = "AUCHAN"; _superCategoria = "SUPERMERCATI";}
+        if (e.descrizioneOperazione.toUpperCase().includes("CARREFOUR")) {_categoria = "CARREFOUR"; _superCategoria = "SUPERMERCATI";}
+
+        // Casa
+        if (e.descrizioneOperazione.toUpperCase().includes("AFFITTO")) {_categoria = "AFFITTO"; _superCategoria = "AFFITTO";}
+        if (e.descrizioneOperazione.toUpperCase().includes("SERVIZIO ELETTRICO NAZIONALE")) {_categoria = "BOLLETTA_LUCE"; _superCategoria = "BOLLETTE";}
+        if (e.descrizioneOperazione.toUpperCase().includes("E.ON ENERGIA")) {_categoria = "BOLLETTA_GAS"; _superCategoria = "BOLLETTE";}
         
+        // Automobile
+        if (e.descrizioneOperazione.toUpperCase().includes("METANO")) {_categoria = "METANO"; _superCategoria = "AUTOMOBILE";}
+        if (e.descrizioneOperazione.toUpperCase().includes("TOURAN")) {_categoria = "SPESE TOURAN"; _superCategoria = "AUTOMOBILE";}
+        if (e.descrizioneOperazione.toUpperCase().includes("NORAUTO")) {_categoria = "NORAUTO"; _superCategoria = "AUTOMOBILE";}
+        if (e.descrizioneOperazione.toUpperCase().includes("AUTOST")) {_categoria = "AUTOSTRADA"; _superCategoria = "AUTOMOBILE";}
+        if (e.descrizioneOperazione.toUpperCase().includes("ASPI")) {_categoria = "AUTOSTRADA"; _superCategoria = "AUTOMOBILE";}
+
+        // Ristoranti
+        if (e.descrizioneOperazione.toUpperCase().includes("AL PORTICO")) {_categoria = "AL PORTICO"; _superCategoria = "RISTORANTI";}
+        if (e.descrizioneOperazione.toUpperCase().includes("NUTOPIA")) {_categoria = "EDONE"; _superCategoria = "RISTORANTI";}
+        if (e.descrizioneOperazione.toUpperCase().includes("TASSINO EVENTI SRL")) {_categoria = "EDONE"; _superCategoria = "RISTORANTI";}
+        if (e.descrizioneOperazione.toUpperCase().includes("AMERICA GRAFFITI")) {_categoria = "AMERICA GRAFFITI"; _superCategoria = "RISTORANTI";}
+        if (e.descrizioneOperazione.toUpperCase().includes("MCDONALD")) {_categoria = "MCDONALDS"; _superCategoria = "RISTORANTI";}
+        if (e.descrizioneOperazione.toUpperCase().includes("ROADHOUSE SPA")) {_categoria = "ROADHOUSE"; _superCategoria = "RISTORANTI";}
+        if (e.descrizioneOperazione.toUpperCase().includes("NEW ERA DI LORENZI CLAUDI")) {_categoria = "APERITIVO"; _superCategoria = "RISTORANTI";}
+        if (e.descrizioneOperazione.toUpperCase().includes("FOOD EOLIANA DI CANDURA D")) {_categoria = "GELATERIA"; _superCategoria = "RISTORANTI";}
+
+        // Carta di credito
+        if (e.descrizioneOperazione.toUpperCase().includes("CARTA DI CREDITO")) {_categoria = "CARTA_CREDITO"; _superCategoria = "CARTA_CREDITO";}
+
+        // Paypal
+        if (e.descrizioneOperazione.toUpperCase().includes("PAYPAL")) {_categoria = "PAYPAL"; _superCategoria = "PAYPAL";}
+
+        // Giroconto
+        if (e.descrizioneOperazione.toUpperCase().includes("GIROCONTO AUTOMATICO")) {_categoria = "GIROCONTO"; _superCategoria = "RISPARMI";}
 
         return {
             ...e,
-            categoria: _categoria || "UNDEFINED"
+            categoria: _categoria || "UNDEFINED",
+            superCategoria: _superCategoria || "UNDEFINED"
         };
     });
 }
