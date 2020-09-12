@@ -180,13 +180,14 @@ function drawPieChart() {
     console.log("sommaPerCategorie", sommaPerCategorie);
     datatable.addRows([
         ['AFFITTO', 384000],
-        ['AUTOMOBILE', 92532],
-        ['BOLLETTE', 50262],
-        ['CARTA_CREDITO', 50286],
-        ['PAYPAL', 38888],
-        ['RISTORANTI', 38080],
+        ['AUTOMOBILE', 97071],
         ['SUPERMERCATI', 90967],
-        ['undefined', 165399]
+        ['RISTORANTI', 59940],
+        ['CARTA_CREDITO', 50286],
+        ['BOLLETTE', 50262],
+        ['PAYPAL', 38888],
+        ['ACQUISTI', 15253],
+        ['undefined', 123747]
     ]);
 
     // Instantiate and draw our chart, passing in some options.
@@ -208,13 +209,18 @@ function assegnaCategorie(arr) {
         if (e.descrizioneOperazione.toUpperCase().includes("AFFITTO")) {_categoria = "AFFITTO"; _superCategoria = "AFFITTO";}
         if (e.descrizioneOperazione.toUpperCase().includes("SERVIZIO ELETTRICO NAZIONALE")) {_categoria = "BOLLETTA_LUCE"; _superCategoria = "BOLLETTE";}
         if (e.descrizioneOperazione.toUpperCase().includes("E.ON ENERGIA")) {_categoria = "BOLLETTA_GAS"; _superCategoria = "BOLLETTE";}
+        // TODO Aggiungere TARI
         
         // Automobile
         if (e.descrizioneOperazione.toUpperCase().includes("METANO")) {_categoria = "METANO"; _superCategoria = "AUTOMOBILE";}
+        if (e.descrizioneOperazione.toUpperCase().includes(" ENI ")) {_categoria = "RIFORNIMENTO"; _superCategoria = "AUTOMOBILE";}
+        if (e.descrizioneOperazione.toUpperCase().includes("DISTRIBUTORE ESSO")) {_categoria = "RIFORNIMENTO"; _superCategoria = "AUTOMOBILE";}
+        if (e.descrizioneOperazione.toUpperCase().includes("IPER STATION")) {_categoria = "RIFORNIMENTO"; _superCategoria = "AUTOMOBILE";}
         if (e.descrizioneOperazione.toUpperCase().includes("TOURAN")) {_categoria = "SPESE TOURAN"; _superCategoria = "AUTOMOBILE";}
         if (e.descrizioneOperazione.toUpperCase().includes("NORAUTO")) {_categoria = "NORAUTO"; _superCategoria = "AUTOMOBILE";}
         if (e.descrizioneOperazione.toUpperCase().includes("AUTOST")) {_categoria = "AUTOSTRADA"; _superCategoria = "AUTOMOBILE";}
         if (e.descrizioneOperazione.toUpperCase().includes("ASPI")) {_categoria = "AUTOSTRADA"; _superCategoria = "AUTOMOBILE";}
+        // TODO aggiungere parcheggi
 
         // Ristoranti
         if (e.descrizioneOperazione.toUpperCase().includes("AL PORTICO")) {_categoria = "AL PORTICO"; _superCategoria = "RISTORANTI";}
@@ -222,9 +228,22 @@ function assegnaCategorie(arr) {
         if (e.descrizioneOperazione.toUpperCase().includes("TASSINO EVENTI SRL")) {_categoria = "EDONE"; _superCategoria = "RISTORANTI";}
         if (e.descrizioneOperazione.toUpperCase().includes("AMERICA GRAFFITI")) {_categoria = "AMERICA GRAFFITI"; _superCategoria = "RISTORANTI";}
         if (e.descrizioneOperazione.toUpperCase().includes("MCDONALD")) {_categoria = "MCDONALDS"; _superCategoria = "RISTORANTI";}
-        if (e.descrizioneOperazione.toUpperCase().includes("ROADHOUSE SPA")) {_categoria = "ROADHOUSE"; _superCategoria = "RISTORANTI";}
+        if (e.descrizioneOperazione.toUpperCase().includes("ROADHOUSE")) {_categoria = "ROADHOUSE"; _superCategoria = "RISTORANTI";}
+        if (e.descrizioneOperazione.toUpperCase().includes("AUTOGRILL")) {_categoria = "AUTOGRILL"; _superCategoria = "RISTORANTI";}
         if (e.descrizioneOperazione.toUpperCase().includes("NEW ERA DI LORENZI CLAUDI")) {_categoria = "APERITIVO"; _superCategoria = "RISTORANTI";}
         if (e.descrizioneOperazione.toUpperCase().includes("FOOD EOLIANA DI CANDURA D")) {_categoria = "GELATERIA"; _superCategoria = "RISTORANTI";}
+        if (e.descrizioneOperazione.toUpperCase().includes("MISCUSI")) {_categoria = "MISCUSI"; _superCategoria = "RISTORANTI";}
+        if (e.descrizioneOperazione.toUpperCase().includes("OKAI")) {_categoria = "OKAI"; _superCategoria = "RISTORANTI";}
+        if (e.descrizioneOperazione.toUpperCase().includes("GUNE' RISTORANTE")) {_categoria = "GUNE'"; _superCategoria = "RISTORANTI";}
+        if (e.descrizioneOperazione.toUpperCase().includes("TRATTORIA LA PESA")) {_categoria = "LA PESA"; _superCategoria = "RISTORANTI";}
+
+        // Acquisti una tantum
+        if (e.descrizioneOperazione.toUpperCase().includes("AMAZON")) {_categoria = "AMAZON"; _superCategoria = "ACQUISTI";}
+        if (e.descrizioneOperazione.toUpperCase().includes("LEROY MERLIN")) {_categoria = "LEROY MERLIN"; _superCategoria = "ACQUISTI";}
+        if (e.descrizioneOperazione.toUpperCase().includes("DECATHLON")) {_categoria = "DECATHLON"; _superCategoria = "ACQUISTI";}
+        if (e.descrizioneOperazione.toUpperCase().includes("MEDIAWORLD")) {_categoria = "MEDIAWORLD"; _superCategoria = "ACQUISTI";}
+        if (e.descrizioneOperazione.toUpperCase().includes("FINLIBRI")) {_categoria = "FINLIBRI"; _superCategoria = "ACQUISTI";}
+
 
         // Carta di credito
         if (e.descrizioneOperazione.toUpperCase().includes("CARTA DI CREDITO")) {_categoria = "CARTA_CREDITO"; _superCategoria = "CARTA_CREDITO";}
@@ -242,3 +261,5 @@ function assegnaCategorie(arr) {
         };
     });
 }
+
+JSONresult.filter((x) => x.categoria == 'UNDEFINED')
